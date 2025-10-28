@@ -8,7 +8,7 @@
 # Description: Build OpenWrt using GitHub Actions
 #
 
-name: Build AX6 OpenWRT
+name: Build RAX3000M OpenWRT
 
 on:
   repository_dispatch:
@@ -25,9 +25,9 @@ env:
   REPO_URL: https://github.com/openwrt/openwrt
   REPO_BRANCH: master
   FEEDS_CONF: feeds.conf.default
-  CONFIG_FILE: AX6/openwrt/AX6-openwrt.config
+  CONFIG_FILE: rax3000m/openwrt/rax3000m-openwrt.config
   DIY_P1_SH: diy-part1.sh
-  DIY_P2_SH: AX6/openwrt/diy-part2-ax6.sh
+  DIY_P2_SH: rax3000m/openwrt/diy-part2-rax3000m.sh
 #  DIY_P3_SH: diy-part3.sh
 #  SSH_ACTIONS: false
   UPLOAD_BIN_DIR: true
@@ -36,8 +36,8 @@ env:
   UPLOAD_WETRANSFER: false
   UPLOAD_RELEASE: true
   TZ: Asia/Shanghai
-  FILE_NAME: Redmi-AX6-OpenWRT
-  PRODUCT_NAME: Redmi-AX6-OpenWRT
+  FILE_NAME: Redmi-rax3000m-OpenWRT
+  PRODUCT_NAME: Redmi-rax3000m-OpenWRT
 
 jobs:
   build:
@@ -115,7 +115,7 @@ jobs:
         $GITHUB_WORKSPACE/$DIY_P1_SH
         
 #    - name: Revert some drop sh*t
-#      run: cp -rf $GITHUB_WORKSPACE/AX6/revert/* openwrt/      
+#      run: cp -rf $GITHUB_WORKSPACE/rax3000m/revert/* openwrt/      
 
     - name: Update feeds
       run: cd openwrt && ./scripts/feeds update -a
