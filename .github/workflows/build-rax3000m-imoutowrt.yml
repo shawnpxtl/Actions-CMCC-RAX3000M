@@ -36,8 +36,8 @@ env:
   UPLOAD_WETRANSFER: false
   UPLOAD_RELEASE: true
   TZ: Asia/Shanghai
-  FILE_NAME: Redmi-rax3000m-ImmortalWrt
-  PRODUCT_NAME: Redmi-rax3000m-ImmortalWrt
+  FILE_NAME: CMCC-rax3000m-ImmortalWrt
+  PRODUCT_NAME: CMCC-rax3000m-ImmortalWrt
 
 jobs:
   build:
