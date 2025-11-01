@@ -45,4 +45,5 @@ Do you want to flashing [ImmortalWrt](tutorial/ImmortalWrt.en_US.md) or [OpenWrt
 * [ImmortalWrt](https://github.com/immortalwrt/immortalwrt)
 * [tmate](https://github.com/tmate-io/tmate)
 * [P3TERX](https://github.com/P3TERX)
+* [hanwckf](https://github.com/hanwckf/immortalwrt-mt798x)
 * and all OpenWRT/ImmortalWrt related contributors
