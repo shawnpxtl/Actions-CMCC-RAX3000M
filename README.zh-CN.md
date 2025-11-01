@@ -34,7 +34,7 @@
 
 ## 截图
 
-![luci\_admin\_status\_overview](.gitbook/assets/AX6-OP.png)
+![luci\_admin\_status\_overview](.gitbook/assets/RAX3000M.jpg)
 
 ## 已知问题
 #### 免责声明：以下已知问题均为个人实测，可能还有未知问题，本人不对因固件导致的任何问题承担任何责任

@@ -30,7 +30,7 @@ Do you want to flashing [ImmortalWrt](tutorial/ImmortalWrt.en_US.md) or [OpenWrt
 
 ## Screenshot
 
-![luci\_admin\_status\_overview](.gitbook/assets/AX6-OP.png)
+![luci\_admin\_status\_overview](.gitbook/assets/RAX3000M.jpg)
 
 ## Issues
 #### Disclaimer: The following known issues are all personal measurements, and there may be unknown issues. I am not responsible for any issues caused by the firmware
