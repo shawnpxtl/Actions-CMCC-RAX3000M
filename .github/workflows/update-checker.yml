@@ -1,58 +1,102 @@
-#
-# Copyright (c) 2019-2021 P3TERX <https://p3terx.com>
-#
-# This is free software, licensed under the MIT License.
-# See /LICENSE for more information.
-#
-# https://github.com/P3TERX/Actions-OpenWrt
-# File: .github/workflows/update-checker.yml
-# Description: Source code update checker
-#
-
-name: Update Checker
-
-env:
-  REPO_URL:  https://github.com/openwrt/openwrt
-  REPO_BRANCH: master
+name: Check Upstream Release
 
 on:
-  workflow_dispatch:
-#  schedule:
-#    - cron: 0 0 * * *
+  schedule:
+    - cron: '0 * * * *'  # 每小时检查一次
+  workflow_dispatch:      # 允许手动触发
 
 jobs:
-  check:
+  check-upstream:
     runs-on: ubuntu-latest
-
     steps:
+      - name: Get latest release from upstream
+        id: upstream
+        run: |
+          UPSTREAM_REPO="owner/upstream-repo"
+          LATEST_TAG=$(curl -s https://api.github.com/repos/$UPSTREAM_REPO/releases/latest | jq -r .tag_name)
+          echo "latest_tag=$LATEST_TAG" >> $GITHUB_OUTPUT
 
-    - name: Get Commit Hash
-      id: getHash
-      run: |
-        git clone --depth 1 $REPO_URL -b $REPO_BRANCH .
-        echo "::set-output name=commitHash::$(git rev-parse HEAD)"
+      - name: Compare with last known version
+        id: compare
+        run: |
+          LAST_TAG_FILE=".last_tag"
+          if [ -f $LAST_TAG_FILE ]; then
+            LAST_TAG=$(cat $LAST_TAG_FILE)
+          else
+            LAST_TAG="none"
+          fi
+          echo "last_tag=$LAST_TAG" >> $GITHUB_OUTPUT
 
-    - name: Compare Commit Hash
-      id: cacheHash
-      uses: actions/cache@v2
-      with:
-        path: .commitHash
-        key: HEAD-${{ steps.getHash.outputs.commitHash }}
+          if [ "$LAST_TAG" != "${{ steps.upstream.outputs.latest_tag }}" ]; then
+            echo "new_release=true" >> $GITHUB_OUTPUT
+          else
+            echo "new_release=false" >> $GITHUB_OUTPUT
+          fi
 
-    - name: Save New Commit Hash
-      if: steps.cacheHash.outputs.cache-hit != 'true'
-      run: |
-        echo ${{ steps.getHash.outputs.commitHash }} | tee .commitHash
+      - name: Trigger workflow if new release
+        if: steps.compare.outputs.new_release == 'true'
+        run: |
+          echo "New release detected: ${{ steps.upstream.outputs.latest_tag }}"
+          # 更新记录
+          echo "${{ steps.upstream.outputs.latest_tag }}" > .last_tag
 
-    - name: Trigger build
-      if: steps.cacheHash.outputs.cache-hit != 'true'
-      uses: peter-evans/repository-dispatch@v1
-      with:
-        token: ${{ secrets.ACTIONS_TRIGGER_PAT }}
-        event-type: Source Code Update
+          # 提交更新记录（或仅触发其他 workflow）
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add .last_tag
+          git commit -m "Update upstream version to ${{ steps.upstream.outputs.latest_tag }}"
+          git push
 
-    - name: Delete workflow runs
-      uses: GitRML/delete-workflow-runs@main
-      with:
-        retain_days: 1
-        keep_minimum_runs: 1
+          # 可选：触发另一个 workflow
+          gh workflow run .github/workflows/name: Check Upstream Release
+
+on:
+  schedule:
+    - cron: '0 * * * *'  # 每小时检查一次
+  workflow_dispatch:      # 允许手动触发
+
+jobs:
+  check-upstream:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get latest release from upstream
+        id: upstream
+        run: |
+          UPSTREAM_REPO="vernesong/OpenClash"
+          LATEST_TAG=$(curl -s https://api.github.com/repos/$UPSTREAM_REPO/releases/latest | jq -r .tag_name)
+          echo "latest_tag=$LATEST_TAG" >> $GITHUB_OUTPUT
+
+      - name: Compare with last known version
+        id: compare
+        run: |
+          LAST_TAG_FILE=".last_tag"
+          if [ -f $LAST_TAG_FILE ]; then
+            LAST_TAG=$(cat $LAST_TAG_FILE)
+          else
+            LAST_TAG="none"
+          fi
+          echo "last_tag=$LAST_TAG" >> $GITHUB_OUTPUT
+
+          if [ "$LAST_TAG" != "${{ steps.upstream.outputs.latest_tag }}" ]; then
+            echo "new_release=true" >> $GITHUB_OUTPUT
+          else
+            echo "new_release=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Trigger workflow if new release
+        if: steps.compare.outputs.new_release == 'true'
+        run: |
+          echo "New release detected: ${{ steps.upstream.outputs.latest_tag }}"
+          # 更新记录
+          # echo "${{ steps.upstream.outputs.latest_tag }}" > .last_tag
+
+          # 提交更新记录（或仅触发其他 workflow）
+          # git config user.name github-actions
+          # git config user.email github-actions@github.com
+          # git add .last_tag
+          # git commit -m "Update upstream version to ${{ steps.upstream.outputs.latest_tag }}"
+          # git push
+
+          # 可选：触发另一个 workflow
+          gh workflow run build-rax3000m-imoutowrt.yml
+
