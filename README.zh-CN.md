@@ -10,7 +10,6 @@
 
 ## 特性
 
-* ADGuard Home
 * OpenClash
 * 网络唤醒
 * DDNS
