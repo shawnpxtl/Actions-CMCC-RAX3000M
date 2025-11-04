@@ -11,6 +11,9 @@ jobs:
     env:
       GH_TOKEN: ${{ github.token }}
     steps:
+      - name: Checkout repository
+          uses: actions/checkout@v4
+          
       - name: Get latest release from upstream
         id: upstream
         run: |
@@ -40,7 +43,7 @@ jobs:
         run: |
           echo "New release detected: ${{ steps.upstream.outputs.latest_tag }}"
           # 更新记录
-          # echo "${{ steps.upstream.outputs.latest_tag }}" > .last_tag
+          echo "${{ steps.upstream.outputs.latest_tag }}" > .last_tag
 
           # 提交更新记录（或仅触发其他 workflow）
           # git config user.name github-actions
