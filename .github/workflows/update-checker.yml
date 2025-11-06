@@ -22,13 +22,13 @@ jobs:
         id: get_latest
         uses: octokit/request-action@v2.x
         with:
-          route: GET /repos/${{ env.UPSTREAM_REPO }}/releases/latest
+          route: GET /repos/${{ env.UPSTREAM_REPO }}/releases
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: 2. 提取标签名
         id: vars
-        run: echo "latest_tag=${{ fromJson(steps.get_latest.outputs.data).tag_name }}" >> $GITHUB_OUTPUT
+        run: echo "latest_tag=${{ fromJson(steps.get_latest.outputs.data)[0].tag_name }}" >> $GITHUB_OUTPUT
 
       - name: 3. 恢复缓存的标签
         id: cache-tag
