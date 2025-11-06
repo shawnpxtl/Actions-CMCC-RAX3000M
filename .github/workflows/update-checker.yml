@@ -1,10 +1,10 @@
-name: Check OpenClash Release
+name: Check for Upstream Release
 
 on:
   workflow_dispatch: # 允许你手动触发测试
   schedule:
-    # 按照你的需求调整频率，例如每小时检查一次
-    - cron: '0 8 * * 6'
+    # 每小时检查一次
+    - cron: '0 * * * *'
 
 # ‼️ 在这里填入上游仓库的 "所有者/仓库名"
 env:
@@ -14,7 +14,6 @@ jobs:
   check:
     runs-on: ubuntu-latest
     outputs:
-      # 定义一个输出，用来告诉下游 job 是否要运行
       run_job: ${{ steps.check_new.outputs.run_job }}
       latest_tag: ${{ steps.vars.outputs.latest_tag }}
 
@@ -25,7 +24,6 @@ jobs:
         with:
           route: GET /repos/${{ env.UPSTREAM_REPO }}/releases/latest
         env:
-          # 使用 GitHub 自动提供的 GITHUB_TOKEN
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: 2. 提取标签名
@@ -33,8 +31,6 @@ jobs:
         run: echo "latest_tag=${{ fromJson(steps.get_latest.outputs.data).tag_name }}" >> $GITHUB_OUTPUT
 
       - name: 3. 恢复缓存的标签
-        # 尝试加载上一个“已知”的标签。
-        # 我们用新标签名作为 key，如果能命中(cache-hit)，说明我们已经见过这个标签了。
         id: cache-tag
         uses: actions/cache/restore@v4
         with:
@@ -51,29 +47,31 @@ jobs:
             echo "检测到新标签 ${{ steps.vars.outputs.latest_tag }}，准备运行任务。"
             echo "run_job=true" >> $GITHUB_OUTPUT
           fi
+          
+      # --- 修正点在这里 (旧的步骤 5 被拆分) ---
 
-      - name: 5. (如果为新) 缓存新标签
+      - name: 5. (如果为新) 创建用于缓存的标记文件
+        # 仅在检测到新标签时运行
+        if: steps.check_new.outputs.run_job == 'true'
+        run: |
+          mkdir -p ./.cache
+          echo "${{ steps.vars.outputs.latest_tag }}" > ./.cache/latest_tag
+
+      - name: 6. (如果为新) 缓存新标签
         # 仅在检测到新标签时运行
         if: steps.check_new.outputs.run_job == 'true'
         uses: actions/cache/save@v4
         with:
           path: ./.cache/latest_tag
           key: upstream-tag-${{ steps.vars.outputs.latest_tag }}
-        # 创建一个虚拟文件用于缓存
-        run: |
-          mkdir -p ./.cache
-          echo "${{ steps.vars.outputs.latest_tag }}" > ./.cache/latest_tag
 
-  # --- 这个 Job 负责调用你的目标 YML ---
+  # --- 这个 Job 负责调用你的目标 YML (这部分无需更改) ---
   run-target-workflow:
-    # 依赖 check job
     needs: check
-    # 只有在 check job 的输出 run_job 为 'true' 时才运行
     if: needs.check.outputs.run_job == 'true'
     
-    # 这里是关键：调用你的 "my-build.yml"
-    uses: ./.github/workflows/build-rax3000m-imoutowrt.yml
+    # 假设你的目标 YML 叫 my-build.yml
+    uses: ./.github/workflows/build-rax3000m-imoutowrt.yml 
     with:
-      # 传入参数
       upstream_tag: ${{ needs.check.outputs.latest_tag }}
-    secrets: inherit # 继承 secrets (如果需要的话)
+    secrets: inherit
