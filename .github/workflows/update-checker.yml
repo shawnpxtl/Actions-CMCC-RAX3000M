@@ -1,57 +1,79 @@
-name: Check OpenClash Release
+name: Check for OpenClash Release
 
 on:
+  workflow_dispatch: # 允许你手动触发测试
   schedule:
-    - cron: '00 8 * * 6'  
-  workflow_dispatch:      # 允许手动触发
+    # 按照你的需求调整频率，例如每小时检查一次
+    - cron: '0 8 * * 6'
+
+# ‼️ 在这里填入上游仓库的 "所有者/仓库名"
+env:
+  UPSTREAM_REPO: "vernesong/OpenClash" 
 
 jobs:
-  check-upstream:
+  check:
     runs-on: ubuntu-latest
-    env:
-      GH_TOKEN: ${{ github.token }}
+    outputs:
+      # 定义一个输出，用来告诉下游 job 是否要运行
+      run_job: ${{ steps.check_new.outputs.run_job }}
+      latest_tag: ${{ steps.vars.outputs.latest_tag }}
+
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        
-      - name: Get latest release from upstream
-        id: upstream
-        run: |
-          UPSTREAM_REPO="vernesong/OpenClash"
-          LATEST_TAG=$(curl -s https://api.github.com/repos/$UPSTREAM_REPO/releases/latest | jq -r .tag_name)
-          echo "latest_tag=$LATEST_TAG" >> $GITHUB_OUTPUT
+      - name: 1. 获取上游最新的 Release 标签
+        id: get_latest
+        uses: octokit/request-action@v2.x
+        with:
+          route: GET /repos/${{ env.UPSTREAM_REPO }}/releases/latest
+        env:
+          # 使用 GitHub 自动提供的 GITHUB_TOKEN
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Compare with last known version
-        id: compare
+      - name: 2. 提取标签名
+        id: vars
+        run: echo "latest_tag=${{ fromJson(steps.get_latest.outputs.data).tag_name }}" >> $GITHUB_OUTPUT
+
+      - name: 3. 恢复缓存的标签
+        # 尝试加载上一个“已知”的标签。
+        # 我们用新标签名作为 key，如果能命中(cache-hit)，说明我们已经见过这个标签了。
+        id: cache-tag
+        uses: actions/cache/restore@v4
+        with:
+          path: ./.cache/latest_tag
+          key: upstream-tag-${{ steps.vars.outputs.latest_tag }}
+
+      - name: 4. 检查标签是否为新
+        id: check_new
         run: |
-          LAST_TAG_FILE=".last_tag"
-          if [ -f $LAST_TAG_FILE ]; then
-            LAST_TAG=$(cat $LAST_TAG_FILE)
+          if [ "${{ steps.cache-tag.outputs.cache-hit }}" == "true" ]; then
+            echo "标签 ${{ steps.vars.outputs.latest_tag }} 已经被处理过，跳过。"
+            echo "run_job=false" >> $GITHUB_OUTPUT
           else
-            LAST_TAG="none"
-          fi
-          echo "last_tag=$LAST_TAG" >> $GITHUB_OUTPUT
-
-          if [ "$LAST_TAG" != "${{ steps.upstream.outputs.latest_tag }}" ]; then
-            echo "new_release=true" >> $GITHUB_OUTPUT
-          else
-            echo "new_release=false" >> $GITHUB_OUTPUT
+            echo "检测到新标签 ${{ steps.vars.outputs.latest_tag }}，准备运行任务。"
+            echo "run_job=true" >> $GITHUB_OUTPUT
           fi
 
-      - name: Trigger workflow if new release
-        if: steps.compare.outputs.new_release == 'true'
+      - name: 5. (如果为新) 缓存新标签
+        # 仅在检测到新标签时运行
+        if: steps.check_new.outputs.run_job == 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: ./.cache/latest_tag
+          key: upstream-tag-${{ steps.vars.outputs.latest_tag }}
+        # 创建一个虚拟文件用于缓存
         run: |
-          echo "New release detected: ${{ steps.upstream.outputs.latest_tag }}"
-          # 更新记录
-          echo "${{ steps.upstream.outputs.latest_tag }}" > .last_tag
+          mkdir -p ./.cache
+          echo "${{ steps.vars.outputs.latest_tag }}" > ./.cache/latest_tag
 
-          # 提交更新记录（或仅触发其他 workflow）
-          # git config user.name github-actions
-          # git config user.email github-actions@github.com
-          # git add .last_tag
-          # git commit -m "Update upstream version to ${{ steps.upstream.outputs.latest_tag }}"
-          # git push
-
-          # 可选：触发另一个 workflow
-          gh workflow run build-rax3000m-imoutowrt.yml
-
+  # --- 这个 Job 负责调用你的目标 YML ---
+  run-target-workflow:
+    # 依赖 check job
+    needs: check
+    # 只有在 check job 的输出 run_job 为 'true' 时才运行
+    if: needs.check.outputs.run_job == 'true'
+    
+    # 这里是关键：调用你的 "my-build.yml"
+    uses: ./.github/workflows/build-rax3000m-imoutowrt.yml
+    with:
+      # 传入参数
+      upstream_tag: ${{ needs.check.outputs.latest_tag }}
+    secrets: inherit # 继承 secrets (如果需要的话)
