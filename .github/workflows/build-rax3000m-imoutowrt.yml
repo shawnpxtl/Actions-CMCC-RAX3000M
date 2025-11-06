@@ -11,17 +11,25 @@
 name: Build RAX3000M ImmortalWrt (hanwckf)
 
 on:
+  # 1. 允许被 update-checker.yml 调用 (这修复了上一个错误)
   workflow_call:
-  repository_dispatch:
-  workflow_dispatch:
     inputs:
       upstream_tag:
-      required: true
-      type: string
+        description: 'The new upstream tag that triggered this run'
+        required: true  # 必须接收这个参数
+        type: string
+
+  # 2. 允许被 dispatch 触发 (来自方案 B)
+  repository_dispatch:
+
+  # 3. 允许手动触发 (保持您原有的功能)
+  workflow_dispatch:
+    inputs:
       ssh:
         description: 'SSH connection to Actions'
         required: false
         default: 'false'
+
 #   schedule:
 #    - cron: 00 8 * * 6
 
