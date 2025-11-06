@@ -15,10 +15,6 @@
 * DDNS
 * 更多功能自行刷入查看(可能会不定期变动)...
 
-## 刷入教程
-
-您是要刷[ImmortalWrt](tutorial/ImmortalWrt.md)还是刷[OpenWrt](tutorial/OpenWrt.md)呢？
-
 ## 后台进入方式和密码
 
    | 项目 | 值 |
