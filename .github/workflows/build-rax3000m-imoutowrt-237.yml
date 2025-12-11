@@ -246,7 +246,7 @@ jobs:
         echo "账号：root" >> release.txt
         echo "密码：无" >> release.txt
         echo "默认主题：Argon" >> release.txt
-        echo "集成插件：openclash wol samba4 eqos upnp hd_idle " >> release.txt
+        echo "集成插件：nikki wol samba4 upnp hd_idle argon_config" >> release.txt
         echo "编译源码：[点此处查看](https://github.com/padavanonly/immortalwrt-mt798x-6.6)" >> release.txt
         echo "status=success" >> $GITHUB_OUTPUT
 
@@ -276,5 +276,6 @@ jobs:
 #        curl "https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendMessage" -d "chat_id=${{ secrets.TELEGRAM_TO }}&text=${MSG}"
 
    
+
 
 
