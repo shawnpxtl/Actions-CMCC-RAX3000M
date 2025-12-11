@@ -10,9 +10,11 @@
 
 ## 特性
 
-* OpenClash
+* OpenClash or nikki
 * 网络唤醒
 * DDNS
+* Samba 4
+* hd_idle
 * 更多功能自行刷入查看(可能会不定期变动)...
 
 ## 后台进入方式和密码
@@ -34,8 +36,7 @@
 ## 已知问题
 #### 免责声明：以下已知问题均为个人实测，可能还有未知问题，本人不对因固件导致的任何问题承担任何责任
 
-* (待定)
-
+* 已知237源码集成Mediatek HNAT加速会导致App图片等资源加载异常，要一劳永逸的话直接关掉，要同时使用并且尽量缓解症状的话可以关闭ipv6且将HNAT连接速率绑定阈值调至1
 
 ## 感谢
 
@@ -46,4 +47,5 @@
 * [tmate](https://github.com/tmate-io/tmate)
 * [P3TERX](https://github.com/P3TERX)<br>
 * [hanwckf](https://github.com/hanwckf/immortalwrt-mt798x)
+* [237](https://github.com/padavanonly/immortalwrt-mt798x-6.6))
 * 以及所有跟OpenWRT/ImmortalWrt等相关的贡献者
