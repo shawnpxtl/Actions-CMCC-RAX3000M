@@ -12,9 +12,11 @@ If you think this project is good, you can star it, I will be very grateful!
 
 ## Features
 
-* OpenClash
+* OpenClash or nikki
 * Wake-On-LAN
 * DDNS
+* Samba 4
+* hd_idle
 * More functions by themselves (may be refreshed from time to time to check)...
 
 ## Default IP address and password
@@ -41,4 +43,5 @@ If you think this project is good, you can star it, I will be very grateful!
 * [tmate](https://github.com/tmate-io/tmate)
 * [P3TERX](https://github.com/P3TERX)
 * [hanwckf](https://github.com/hanwckf/immortalwrt-mt798x)
+* [237](https://github.com/padavanonly/immortalwrt-mt798x-6.6)
 * and all OpenWRT/ImmortalWrt related contributors
