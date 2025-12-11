@@ -47,5 +47,5 @@
 * [tmate](https://github.com/tmate-io/tmate)
 * [P3TERX](https://github.com/P3TERX)<br>
 * [hanwckf](https://github.com/hanwckf/immortalwrt-mt798x)
-* [237](https://github.com/padavanonly/immortalwrt-mt798x-6.6))
+* [237](https://github.com/padavanonly/immortalwrt-mt798x-6.6)
 * 以及所有跟OpenWRT/ImmortalWrt等相关的贡献者
