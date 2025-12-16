@@ -91,11 +91,7 @@ jobs:
         
     - name: Check server performance
       run: |
-        echo "警告⚠"
-        echo "若分配的服务器性能不足，务必及时取消，重新运行！"
-        echo "自测编译成功CPU型号：8370C,8171M,8272CL,E5-26xxv4"
-        echo "自测性能不足CPU型号："
-        echo -e "-------------- ------------CPU信息------------------------------------------\n"
+        echo -e "---------------------------CPU信息------------------------------------------\n"
         echo "CPU物理数量:$(cat /proc/cpuinfo| grep "physical id"| sort| uniq| wc -l)"
         echo -e "CPU核心及版本信息：$(cat /proc/cpuinfo | grep name | cut -f2 -d: | uniq -c) \n"
         echo "-------------------------------内存信息-------------------------------------------"
@@ -276,6 +272,7 @@ jobs:
 #        curl "https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendMessage" -d "chat_id=${{ secrets.TELEGRAM_TO }}&text=${MSG}"
 
    
+
 
 
 
