@@ -30,7 +30,7 @@ sed -i '/customized in this file/a net.netfilter.nf_conntrack_max=65535' package
 # git clone https://github.com/sirpdboy/luci-app-netdata.git package/luci-app-netdata
 # git clone https://github.com/vernesong/OpenClash.git --depth=1 package/OpenClash
 # git clone https://github.com/xiaoxiao29/luci-app-adguardhome.git package/luci-app-adguardhome
-sudo apt install libfuse-dev
+sudo apt install -y libfuse-dev
 rm -rf feeds/packages/lang/golang
 git clone https://github.com/sbwml/packages_lang_golang -b 24.x feeds/packages/lang/golang
 
