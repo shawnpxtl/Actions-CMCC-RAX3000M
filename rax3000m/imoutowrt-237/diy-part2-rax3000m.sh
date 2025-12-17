@@ -28,11 +28,12 @@ sed -i '/customized in this file/a net.netfilter.nf_conntrack_max=65535' package
 
 # 添加额外软件包
 # git clone https://github.com/sirpdboy/luci-app-netdata.git package/luci-app-netdata
-# git clone https://github.com/vernesong/OpenClash.git --depth=1 package/OpenClash
 # git clone https://github.com/xiaoxiao29/luci-app-adguardhome.git package/luci-app-adguardhome
 sudo apt install -y libfuse-dev
 rm -rf feeds/packages/lang/golang
 git clone https://github.com/sbwml/packages_lang_golang -b 24.x feeds/packages/lang/golang
+rm -rf feeds/luci/applications/luci-app-openclash
+git clone https://github.com/vernesong/OpenClash.git --depth=1 feeds/luci/applications/luci-app-openclash
 
 # 添加核心温度的显示
 # sed -i 's|pcdata(boardinfo.system or "?")|luci.sys.exec("uname -m") or "?"|g' feeds/luci/modules/luci-mod-admin-full/luasrc/view/admin_status/index.htm
