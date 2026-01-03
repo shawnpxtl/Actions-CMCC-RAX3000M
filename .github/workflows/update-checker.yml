@@ -8,7 +8,7 @@ on:
 
 # ‼️ 在这里填入上游仓库的 "所有者/仓库名"
 env:
-  UPSTREAM_REPO: "vernesong/OpenClash" 
+  UPSTREAM_REPO: "nikkinikki-org/OpenWrt-nikki" 
 
 jobs:
   check:
@@ -71,7 +71,7 @@ jobs:
     if: needs.check.outputs.run_job == 'true'
     
     # 假设你的目标 YML 叫 my-build.yml
-    uses: ./.github/workflows/build-rax3000m-imoutowrt.yml 
+    uses: ./.github/workflows/build-rax3000m-imoutowrt-237.yml 
     with:
       upstream_tag: ${{ needs.check.outputs.latest_tag }}
     secrets: inherit
