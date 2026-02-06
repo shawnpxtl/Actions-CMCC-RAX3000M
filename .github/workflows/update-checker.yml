@@ -65,6 +65,12 @@ jobs:
           path: ./.cache/latest_tag
           key: upstream-tag-${{ steps.vars.outputs.latest_tag }}
 
+      - name: 7. Delete workflow runs
+        uses: GitRML/delete-workflow-runs@main
+        with:
+          retain_days: 1
+          keep_minimum_runs: 3
+
   # --- 这个 Job 负责调用你的目标 YML (这部分无需更改) ---
   run-target-workflow:
     needs: check
