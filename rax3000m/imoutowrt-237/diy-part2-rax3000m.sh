@@ -10,7 +10,8 @@
 # Description: OpenWrt DIY script part 2 (After Update feeds)
 #
 
-# Add backup file
+# Add backup file and 
+echo "$(date +"%Y.%m.%d-%H%M-immortalwrt-6.6-cmcc_rax3000m")" >> /etc/ver
 echo '/etc/nikki/run/geoip.metadb' >> /etc/sysupgrade.conf
 
 # Modify default IP and password
