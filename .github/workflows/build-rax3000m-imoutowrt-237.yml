@@ -232,7 +232,7 @@ jobs:
       id: tag
       if: env.UPLOAD_RELEASE == 'true' && !cancelled()
       run: |
-        echo "release_tag=$(date +"%Y.%m.%d-%H%M-immortalwrt-6.6-cmcc_rax3000m")" >> $GITHUB_OUTPUT
+        echo "release_tag=$(date +%Y%m%d%H%M)" >> $GITHUB_OUTPUT
         touch release.txt
         echo "cmcc_rax3000m-6.6固件" >> release.txt
         echo "后台：192.168.2.1" >> release.txt
@@ -269,6 +269,7 @@ jobs:
 #        curl "https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendMessage" -d "chat_id=${{ secrets.TELEGRAM_TO }}&text=${MSG}"
 
    
+
 
 
 
