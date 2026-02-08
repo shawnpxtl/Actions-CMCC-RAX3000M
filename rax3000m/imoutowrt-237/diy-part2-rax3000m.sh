@@ -10,6 +10,9 @@
 # Description: OpenWrt DIY script part 2 (After Update feeds)
 #
 
+# Add backup file
+echo '/etc/nikki/run/geoip.metadb' >> /etc/sysupgrade.conf
+
 # Modify default IP and password
 sed -i 's/192.168.6.1/192.168.2.1/g' package/base-files/files/bin/config_generate
 
