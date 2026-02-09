@@ -139,6 +139,7 @@ jobs:
         cd openwrt
         $GITHUB_WORKSPACE/$DIY_P2_SH
         #$GITHUB_WORKSPACE/$DIY_P3_SH
+        echo "release_tag=$(date +%Y%m%d%H%M)" >> package/base-files/files/etc/ver
 #        sed -i 's/OpenWrt/MRG AutoBuild ${{ env.DATE1 }} @ OpenWrt/g' package/lean/default-settings/files/zzz-default-settings
 
 #     - name: SSH connection to Actions
@@ -232,7 +233,7 @@ jobs:
       id: tag
       if: env.UPLOAD_RELEASE == 'true' && !cancelled()
       run: |
-        echo "release_tag=$(date +%Y%m%d%H%M)" >> $GITHUB_OUTPUT
+        cat package/base-files/files/etc/ver >> $GITHUB_OUTPUT
         touch release.txt
         echo "cmcc_rax3000m-6.6固件" >> release.txt
         echo "后台：192.168.2.1" >> release.txt
@@ -269,6 +270,7 @@ jobs:
 #        curl "https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendMessage" -d "chat_id=${{ secrets.TELEGRAM_TO }}&text=${MSG}"
 
    
+
 
 
 
