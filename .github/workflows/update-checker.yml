@@ -20,7 +20,7 @@ jobs:
     steps:
       - name: 1. 获取上游最新的 Release 标签
         id: get_latest
-        uses: octokit/request-action@v2.x
+        uses: octokit/request-action@v3.x
         with:
           route: GET /repos/${{ env.UPSTREAM_REPO }}/releases
         env:
@@ -32,7 +32,7 @@ jobs:
 
       - name: 3. 恢复缓存的标签
         id: cache-tag
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@v5
         with:
           path: ./.cache/latest_tag
           key: upstream-tag-${{ steps.vars.outputs.latest_tag }}
@@ -60,13 +60,13 @@ jobs:
       - name: 6. (如果为新) 缓存新标签
         # 仅在检测到新标签时运行
         if: steps.check_new.outputs.run_job == 'true'
-        uses: actions/cache/save@v4
+        uses: actions/cache/save@v5
         with:
           path: ./.cache/latest_tag
           key: upstream-tag-${{ steps.vars.outputs.latest_tag }}
 
       - name: 7. Delete workflow runs
-        uses: GitRML/delete-workflow-runs@main
+        uses: Mattraks/delete-workflow-runs@main
         with:
           retain_days: 1
           keep_minimum_runs: 3
