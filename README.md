@@ -13,7 +13,7 @@
 * OpenClash or nikki
 * 网络唤醒
 * DDNS
-* Samba 4
+* Samba4
 * hd_idle
 * 更多功能自行刷入查看(可能会不定期变动)...
 
