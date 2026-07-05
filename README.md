@@ -51,6 +51,6 @@
 
 ## 所用源码
 
-* [hanwckf](https://github.com/hanwckf/immortalwrt-mt798x)(历史,2025.10-2025.12)
-* [237](https://github.com/padavanonly/immortalwrt-mt798x-6.6)(历史,2025.12-2026.7)
-* [chasey-dev](https://github.com/chasey-dev/immortalwrt-mt798x-rebase)(目前使用)
+* [hanwckf](https://github.com/hanwckf/immortalwrt-mt798x)(immortalwrt 21.02,历史,2025.10-2025.12)
+* [237](https://github.com/padavanonly/immortalwrt-mt798x-6.6)(immortalwrt 24.10,历史,2025.12-2026.7)
+* [chasey-dev](https://github.com/chasey-dev/immortalwrt-mt798x-rebase)(immortalwrt 25.12,目前使用)
