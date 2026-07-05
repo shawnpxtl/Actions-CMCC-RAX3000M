@@ -53,4 +53,4 @@
 
 * [hanwckf](https://github.com/hanwckf/immortalwrt-mt798x)(历史,2025.10-2025.12)
 * [237](https://github.com/padavanonly/immortalwrt-mt798x-6.6)(历史,2025.12-2026.7)
-* [chasey-dev](https://github.com/padavanonly/immortalwrt-mt798x-6.6)(目前使用)
+* [chasey-dev](https://github.com/chasey-dev/immortalwrt-mt798x-rebase)(目前使用)
