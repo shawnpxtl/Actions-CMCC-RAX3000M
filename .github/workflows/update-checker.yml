@@ -8,7 +8,7 @@ on:
 
 # ‼️ 在这里填入上游仓库的 "所有者/仓库名"
 env:
-  UPSTREAM_REPO: "nikkinikki-org/OpenWrt-nikki" 
+  UPSTREAM_REPO: "MetaCubeX/mihomo" 
 
 jobs:
   check:
