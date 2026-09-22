@@ -28,7 +28,9 @@ jobs:
 
       - name: 2. 提取标签名
         id: vars
-        run: echo "latest_tag=${{ fromJson(steps.get_latest.outputs.data)[0].tag_name }}" >> $GITHUB_OUTPUT
+        run: |
+          latest_tag=$(echo '${{ steps.get_latest.outputs.data }}' | jq -r '.[0].tag_name')
+          echo "latest_tag=$latest_tag" >> $GITHUB_OUTPUT
 
       - name: 3. 恢复缓存的标签
         id: cache-tag
