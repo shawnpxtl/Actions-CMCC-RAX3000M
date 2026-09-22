@@ -22,8 +22,7 @@ jobs:
         id: get_latest
         uses: octokit/request-action@v3.x
         with:
-          route: GET /repos/${{ env.UPSTREAM_REPO }}/releases
-          per_page: 1
+          route: GET /repos/${{ env.UPSTREAM_REPO }}/releases?per_page=1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
